@@ -1,38 +1,71 @@
 <template>
-  <TodayWeather 
-    temperatureValue="27"
-    temperatureUnit="C"
-    currentStatus="Light rain"
-    feelLike="26"
-    wind="2"
-    barometer="1007.00"
-    visibility="8"
-    humidity="100"
-    dewPoint="26" />
+  <div class="home-screen">
+    <TodayWeather 
+      temperatureValue=27
+      temperatureUnit="C"
+      currentStatus="Light rain"
+      feelLike=26
+      wind=2
+      barometer=1007.00
+      visibility=8
+      humidity=100
+      dewPoint=26 />
+    
+    <WeatherList />
+
+    <DailyDetail />
+  </div>
 </template>
 
 <script>
 import TodayWeather from './components/TodayWeather.vue'
+import WeatherList from './components/WeatherList.vue'
+import DailyDetail from './components/DailyDetail.vue'
 
 export default {
   name: 'App',
   components: {
-    TodayWeather
+    TodayWeather,
+    WeatherList,
+    DailyDetail
   }
 }
 </script>
 
 <style>
+body {
+  background-image: url('./assets/rain-bg.jpg');
+  background-color: #cccccc;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: auto;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #f9f9fa;
   margin-top: 60px;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  
+}
+
+button {
+  text-transform: uppercase;
+  border: none;
+  padding: 1rem;
+  font-weight: bolder;
+  background-color: rgba(255,255,255,.1);
+  color: #f9f9fa;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: rgba(255,255,255,.5);
 }
 
 .container {
@@ -46,6 +79,14 @@ export default {
 
 .u-display-flex {
   display: flex;
+}
+
+.u-flex-between {
+  justify-content: space-between;
+}
+
+.u-margin-top-small {
+  margin-top: 1rem;
 }
 
 [class*="col-"] {
