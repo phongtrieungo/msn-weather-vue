@@ -35,7 +35,8 @@ export default {
         humidity: Number,
         wind: Number,
         visibility:  Number,
-        dewPoint: Number
+        dewPoint: Number,
+        weatherData: Object
     }
 }
 </script>

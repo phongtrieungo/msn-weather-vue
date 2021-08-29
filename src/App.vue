@@ -1,17 +1,18 @@
 <template>
   <div class="home-screen">
     <TodayWeather 
-      temperatureValue=27
-      temperatureUnit="C"
-      currentStatus="Light rain"
-      feelLike=26
-      wind=2
-      barometer=1007.00
-      visibility=8
-      humidity=100
-      dewPoint=26 />
+      :temperatureValue="temperatureValue"
+      :temperatureUnit="'C'"
+      :currentStatus="currentStatus"
+      :feelLike="feelLike"
+      :wind="wind"
+      :barometer="barometer"
+      :visibility="visibility"
+      :humidity="humidity"
+      :dewPoint="dewPoint"
+      :weatherData="weatherData" />
     
-    <WeatherList />
+    <WeatherList :weatherList="weatherList" @clicked="getWeatherDataRenderingChart"/>
 
     <DailyDetail />
   </div>
@@ -21,6 +22,9 @@
 import TodayWeather from './components/TodayWeather.vue'
 import WeatherList from './components/WeatherList.vue'
 import DailyDetail from './components/DailyDetail.vue'
+import { format } from 'date-fns'
+
+const ApiKey = '6028a1a7dea7eb6ac78b16fb95bc5c29'
 
 export default {
   name: 'App',
@@ -28,6 +32,65 @@ export default {
     TodayWeather,
     WeatherList,
     DailyDetail
+  },
+  data() {
+    return {
+      weatherData: Object,
+      temperatureValue: Number,
+      visibility: Number,
+      feelLike: Number,
+      humidity: Number,
+      wind: Number,
+      currentStatus: String,
+      barometer: Number,
+      dewPoint: Number,
+      weatherList: Object,
+      originalWeatherList: Array
+    }
+  },
+  methods: {
+    groupByDate(list = []) {
+      if (!list.length) {
+        return list
+      }
+
+      return list.reduce((pre, curr) => {
+        if (!pre.length) {
+          let date = curr.dt_txt.split(' ')[0].toString()
+          return {
+            ...pre,
+            [date]: {
+              ...curr,
+              displayDate: format(new Date(date), 'E dd')
+            }
+          }
+        }
+      }, {})
+    },
+    fetchWeather() {
+      const url = `http://api.openweathermap.org/data/2.5/forecast?q=ho chi minh&appid=${ApiKey}&units=metric`;
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          this.currentStatus = data.list[0].weather[0].main;
+          this.temperatureValue = Math.floor(data.list[0].main.temp);
+          this.barometer = data.list[0].main.temp.pressure;
+          this.visibility = data.list[0].visibility;
+          this.feelLike = data.list[0].main.feels_like;
+          this.humidity = data.list[0].main.humidity;
+          this.wind = data.list[0].wind.speed;
+          this.dewPoint = 0;
+
+          this.originalWeatherList = data.list;
+          this.weatherList = this.groupByDate(data.list);
+        })
+    },
+    getWeatherDataRenderingChart(value) {
+      console.log(value);
+    }
+  },
+  created() {
+    this.fetchWeather()
   }
 }
 </script>
@@ -83,6 +146,10 @@ button:hover {
 
 .u-flex-between {
   justify-content: space-between;
+}
+
+.u-flex-align-items-center {
+  align-items: center;
 }
 
 .u-margin-top-small {

@@ -1,12 +1,15 @@
 <template>
   <div class="weather-list">
     <ul class="scroll-menu">
-      <li v-for="weather in weatherList" :key="weather.date">
+      <li v-for="(value, name) in weatherList" :key="name" v-on:click="onSelectWeather(name)">
           <div class="u-flex-column">
-            <span>{{ weather.date }}</span>
-            <span>{{ weather.status }}</span>
-            <span>{{ weather.high }}</span>
-            <span>{{ weather.low }}</span>
+            <span>{{ value.displayDate }}</span>
+            <span class="u-display-flex u-flex-align-items-center">
+              <img v-bind:src="`http://openweathermap.org/img/wn/${value.weather[0].icon}@2x.png`" class="weather-status-icon">
+              {{ value.weather[0].main }}
+            </span>
+            <span>{{ value.main.temp_max }} °C</span>
+            <span>{{ value.main.temp_min }} °C</span>
           </div>
       </li>
     </ul>
@@ -14,56 +17,15 @@
 </template>
 
 <script>
-import { format, addDays } from 'date-fns'
-
-const weatherList = [
-  {
-    date: format(addDays(new Date(), 0), 'E dd'),
-    high: 32,
-    low: 25,
-    humidity: 68,
-    status: "thunder",
-  },
-  {
-    date: format(addDays(new Date(), 1), 'E dd'),
-    high: 32,
-    low: 25,
-    humidity: 66,
-    status: "thunder",
-  },
-  {
-    date: format(addDays(new Date(), 2), 'E dd'),
-    high: 32,
-    low: 25,
-    humidity: 75,
-    status: "thunder",
-  },
-  {
-    date: format(addDays(new Date(), 3), 'E dd'),
-    high: 32,
-    low: 25,
-    humidity: 75,
-    status: "thunder",
-  },
-  {
-    date: format(addDays(new Date(), 4), 'E dd'),
-    high: 32,
-    low: 25,
-    humidity: 75,
-    status: "thunder",
-  },
-  {
-    date: format(addDays(new Date(), 5), 'E dd'),
-    high: 32,
-    low: 25,
-    humidity: 75,
-    status: "thunder",
-  },
-];
 export default {
-  data: () => ({
-      weatherList
-  })
+  props: {
+    weatherList: Object
+  },
+  methods: {
+    onSelectWeather(selected) {
+      this.$emit('clicked', selected);
+    }
+  }
 };
 </script>
 
@@ -97,6 +59,11 @@ li:hover {
 
 li:not(:hover) {
     border-bottom: 1px solid white;
+}
+
+.weather-status-icon {
+  width: 3rem;
+  height: 3rem;
 }
 
 @media only screen and (min-width: 768px) {
