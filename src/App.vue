@@ -68,7 +68,7 @@ export default {
       }, {})
     },
     fetchWeather() {
-      const url = `http://api.openweathermap.org/data/2.5/forecast?q=ho chi minh&appid=${ApiKey}&units=metric`;
+      const url = `https://api.openweathermap.org/data/2.5/forecast?q=ho chi minh&appid=${ApiKey}&units=metric`;
       fetch(url)
         .then(response => response.json())
         .then(data => {
