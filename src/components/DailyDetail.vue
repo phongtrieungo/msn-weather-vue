@@ -4,12 +4,17 @@
             <button>daily summary</button>
             <button>hourly</button>
         </div>
+        <PlanetChart />
     </div>
 </template>
 
 <script>
+import PlanetChart from './PlanetChart.vue'
+
 export default {
-    
+    components: {
+        PlanetChart
+    }
 }
 </script>
 
